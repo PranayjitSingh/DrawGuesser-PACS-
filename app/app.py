@@ -1,0 +1,100 @@
+from flask import Flask, render_template
+from flask_cors import CORS
+import torch
+import torch.nn as nn
+from torchvision import transforms
+from PIL import Image
+from flask import request, jsonify
+import base64
+import os
+
+global model_loaded_cpu
+data_transforms = {
+    'test': transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Grayscale(),
+        transforms.Lambda(lambda x: x.repeat(3, 1, 1)) 
+    ])}
+
+app = Flask(__name__)
+cors = CORS(app, resources={r"/foo": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+
+@app.route('/')
+def main():
+    return render_template('index.html')
+
+def prediction(fileName):
+    # ---------------------------------------#
+    device = torch.device("cpu")
+    model = torch.hub.load('facebookresearch/semi-supervised-ImageNet1K-models', 'resnet50_swsl')
+    # MODELS: https://github.com/facebookresearch/semi-supervised-ImageNet1K-models
+    #model = models.resnet18(pretrained=True)
+    num_ftrs = model.fc.in_features
+    fully_connected  = nn.Sequential(
+        nn.Linear(num_ftrs, 7),
+        nn.ReLU()
+    )
+    model.fc = fully_connected
+    model = model.to(device)
+    model_loaded = model
+    model_loaded.load_state_dict(torch.load("model.pt", map_location=device))
+    model_loaded_cpu = model_loaded.cpu()
+    print("Model Loaded")
+    # ---------------------------------------#
+
+    img = Image.open(fileName)
+    img = img.convert('RGB')
+    img = img.resize((227,227))   
+    print(img.size)
+
+    img = data_transforms["test"](img)
+    img = img.cpu().float()
+    img = img.unsqueeze(0)
+    
+    output = model_loaded_cpu(img)
+    _, predicted = torch.max(output.data, 1)
+
+    labels = {
+        "0" : "Giraffe",
+        "1" : "Guitar",
+        "2" : "House",
+        "3" : "Dog",
+        "4" : "Horse",
+        "5" : "Elephant",
+        "6" : "Person"
+    }
+
+    guess = labels[str(predicted.numpy()[0])]
+    print(guess)
+    
+    return guess
+    # 0 - Giraffe
+    # 1 - Guitar
+    # 2 - House
+    # 3 - Dog
+    # 4 - Horse
+    # 5 - Elephant
+    # 6 - Person
+
+    # RESEARCH: https://openreview.net/pdf?id=z-LBrGmZaNs
+    # edge-detection?
+    # --> pre-processing on the training data to conduct edge extraction --> generate model --> may improve because the output sketch
+
+@app.route('/postmethod', methods=['POST'])
+def postmethod():
+    data = request.get_json()
+    fullData = data['out']
+    code = fullData.split(";",1)[1].replace("base64,", "")
+    imgData = base64.b64decode(code)
+    if os.path.exists("to_guess.png"):
+        os.remove("to_guess.png")
+    filename = 'to_guess.png'  # I assume you have a way of picking unique filenames
+    with open(filename, 'wb') as f:
+        f.write(imgData)
+    out = prediction(filename)
+    return jsonify({"guess": out})
+
+if  __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)

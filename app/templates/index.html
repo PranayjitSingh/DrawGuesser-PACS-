@@ -1,0 +1,27 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='styles/styles.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <title>Drawing app</title>
+</head>
+<body>
+    <h1 id="header">Draw a Giraffe, Guitar, House, Dog, Horse, Elephant or Person</h1>
+    <h2 id="guess_header">A.I. Guess:</h2>
+    <section class="container">
+        <div class="drawing-board">
+            <canvas id="drawing-board"></canvas>
+        </div>
+    </section>
+    <div id="toolbar">
+        <input type="button" id="guess" onclick='guesser()' value="Guess"></button>
+        <input type="button" id="reset" onclick='resetCanvas()' value="Reset"></button>
+    </div>
+    <script src="{{url_for('static',filename='main.js')}}"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</body>
+</html>
