@@ -3,7 +3,7 @@ from flask_cors import CORS
 import torch
 import torch.nn as nn
 from torchvision import transforms
-from PIL import Image
+from PIL import Image, ImageOps
 from flask import request, jsonify
 import base64
 import os
@@ -46,7 +46,8 @@ def prediction(fileName):
 
     img = Image.open(fileName)
     img = img.convert('RGB')
-    img = img.resize((227,227))   
+    img = ImageOps.expand(img, 75)
+    img = img.resize((227,227))
     print(img.size)
 
     img = data_transforms["test"](img)
