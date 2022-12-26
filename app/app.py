@@ -7,6 +7,7 @@ from PIL import Image, ImageOps
 from flask import request, jsonify
 import base64
 import os
+import sys
 
 global model_loaded_cpu
 data_transforms = {
@@ -100,4 +101,6 @@ def postmethod():
     return jsonify({"guess": out})
 
 if  __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+    host_ip = sys.argv[1]
+    port = sys.argv[2]
+    app.run(host=host_ip, port=port, debug=True)

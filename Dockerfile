@@ -9,7 +9,6 @@ WORKDIR /app
 
 # install the dependencies and packages in the requirements file
 RUN pip install -r requirements.txt
-RUN pip install torch==1.9.0 torchvision==0.10.0 torchaudio==0.10.0
 
 # set environment variables for Flask debug development
 ENV FLASK_APP=app.py
@@ -20,4 +19,4 @@ ENV FLASK_DEBUG=1
 COPY ./app /app
 
 # execution command
-CMD ["python", "app.py"]
+CMD ["python", "app.py", "0.0.0.0", "5000"]
