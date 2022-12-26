@@ -28,7 +28,7 @@ def main():
 def prediction(fileName):
     # ---------------------------------------#
     device = torch.device("cpu")
-    model = torch.hub.load('facebookresearch/semi-supervised-ImageNet1K-models', 'resnet50_swsl')
+    model = torch.hub.load('facebookresearch/semi-supervised-ImageNet1K-models', 'resnext101_32x8d_ssl')
     # MODELS: https://github.com/facebookresearch/semi-supervised-ImageNet1K-models
     #model = models.resnet18(pretrained=True)
     num_ftrs = model.fc.in_features
@@ -40,6 +40,7 @@ def prediction(fileName):
     model = model.to(device)
     model_loaded = model
     model_loaded.load_state_dict(torch.load("model.pt", map_location=device))
+    model.eval()
     model_loaded_cpu = model_loaded.cpu()
     print("Model Loaded")
     # ---------------------------------------#
@@ -55,15 +56,16 @@ def prediction(fileName):
     img = img.unsqueeze(0)
     
     output = model_loaded_cpu(img)
+    print(output.data)
     _, predicted = torch.max(output.data, 1)
 
     labels = {
-        "0" : "Giraffe",
-        "1" : "Guitar",
-        "2" : "House",
-        "3" : "Dog",
+        "0" : "Dog",
+        "1" : "Elephant",
+        "2" : "Giraffe",
+        "3" : "Guitar",
         "4" : "Horse",
-        "5" : "Elephant",
+        "5" : "House",
         "6" : "Person"
     }
 
@@ -92,7 +94,7 @@ def postmethod():
     if os.path.exists("to_guess.png"):
         os.remove("to_guess.png")
     filename = 'to_guess.png'  # I assume you have a way of picking unique filenames
-    with open(filename, 'wb') as f:
+    with open(filename, 'wb+') as f:
         f.write(imgData)
     out = prediction(filename)
     return jsonify({"guess": out})

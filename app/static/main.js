@@ -55,6 +55,7 @@ window.addEventListener('scroll', e => {
 
 function guesser(){
     if (guessed==false){
+        predictionString.textContent="A.I. Guess: LOADING..." ;
         predict();
         guessButton.style.backgroundColor = "#bfbfbf";
         guessButton.style.color = "grey";
