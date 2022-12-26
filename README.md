@@ -2,7 +2,7 @@
 
 Web application which guesses whether the artist drew a Dog, House, Giraffe, Horse, Elephant or ~~Person~~.
 
-*Note: Guessing for "Person" is very poor due to small training pool, so temporarily disabled*
+*Note: Guessing for "Person" is very poor due to small training pool, so temporarily disabled*  
 *Note: Initial guess after launching server may take a minute or two (has to download pre-trained model)*
 
 Model was generated using pre-trained ResNext101_32x8d weights and additional Linear and ReLu layers. Model was trained on subset of PACS dataset. These pre-trained weights were used based off the data presented in *https://openreview.net/pdf?id=z-LBrGmZaNs* . Follow-up to work completed for University of Waterloo SYDE522.
