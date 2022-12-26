@@ -1,4 +1,4 @@
-# DrawGuesser #
+# DrawGuesser - PACS #
 
 Web application which guesses whether the artist drew a Dog, House, Giraffe, Horse, Elephant or ~~Person~~.
 
