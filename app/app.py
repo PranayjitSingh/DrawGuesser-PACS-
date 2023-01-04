@@ -31,7 +31,6 @@ def prediction(fileName):
     device = torch.device("cpu")
     model = torch.hub.load('facebookresearch/semi-supervised-ImageNet1K-models', 'resnext101_32x8d_ssl')
     # MODELS: https://github.com/facebookresearch/semi-supervised-ImageNet1K-models
-    #model = models.resnet18(pretrained=True)
     num_ftrs = model.fc.in_features
     fully_connected  = nn.Sequential(
         nn.Linear(num_ftrs, 7),
@@ -43,21 +42,17 @@ def prediction(fileName):
     model_loaded.load_state_dict(torch.load("model.pt", map_location=device))
     model.eval()
     model_loaded_cpu = model_loaded.cpu()
-    print("Model Loaded")
-    # ---------------------------------------#
 
     img = Image.open(fileName)
     img = img.convert('RGB')
     img = ImageOps.expand(img, 75)
     img = img.resize((227,227))
-    print(img.size)
 
     img = data_transforms["test"](img)
     img = img.cpu().float()
     img = img.unsqueeze(0)
     
     output = model_loaded_cpu(img)
-    print(output.data)
     _, predicted = torch.max(output.data, 1)
 
     labels = {
@@ -71,16 +66,8 @@ def prediction(fileName):
     }
 
     guess = labels[str(predicted.numpy()[0])]
-    print(guess)
     
     return guess
-    # 0 - Giraffe
-    # 1 - Guitar
-    # 2 - House
-    # 3 - Dog
-    # 4 - Horse
-    # 5 - Elephant
-    # 6 - Person
 
     # RESEARCH: https://openreview.net/pdf?id=z-LBrGmZaNs
     # edge-detection?
@@ -94,7 +81,7 @@ def postmethod():
     imgData = base64.b64decode(code)
     if os.path.exists("to_guess.png"):
         os.remove("to_guess.png")
-    filename = 'to_guess.png'  # I assume you have a way of picking unique filenames
+    filename = 'to_guess.png'
     with open(filename, 'wb+') as f:
         f.write(imgData)
     out = prediction(filename)
