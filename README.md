@@ -21,9 +21,9 @@ To get the web-app running locally, I suggest using Docker-Compose. However, a r
 6\. Open a browser and navigate to http://127.0.0.1:4000  
 
 ## Local Installation ##
-*Note: I used Python 3.9.6 and I suggest making sure pip is upgraded before proceeding*  
+*Note: I used Python 3.9.6 and I suggest using a virtual environment for this*  
 4\. Navigate to repo root folder  
 5\. `pip install -r requirements.txt`  
 6\. `python app/app.py 127.0.0.1 54321`  
-    - Can replace the localhost IP and Port as you need  
+&nbsp;&nbsp;&nbsp;&nbsp;- Can replace the localhost IP and Port as you need  
 7\. Open a browser and navigate to http://127.0.0.1:54321  
