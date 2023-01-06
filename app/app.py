@@ -39,7 +39,7 @@ def prediction(fileName):
     model.fc = fully_connected
     model = model.to(device)
     model_loaded = model
-    model_loaded.load_state_dict(torch.load("model.pt", map_location=device))
+    model_loaded.load_state_dict(torch.load("app/model.pt", map_location=device))
     model.eval()
     model_loaded_cpu = model_loaded.cpu()
 
