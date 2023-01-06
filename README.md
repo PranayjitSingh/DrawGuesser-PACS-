@@ -15,12 +15,12 @@ To get the web-app running locally, I suggest using Docker-Compose. However, a r
 2\. Download the model from DropBox (model.pt): https://www.dropbox.com/s/yb0uhrl2al87jai/model.pt?dl=0  
 3\. Save the file as [repo root]/app/model.pt  
 
-## Using Docker Containers ##
+### Using Docker Containers ##
 4\. Navigate to repo root folder  
 5\. `docker-compose up [-d]`  
 6\. Open a browser and navigate to http://127.0.0.1:4000  
 
-## Local Installation ##
+### Local Installation ##
 *Note: I used Python 3.9.6 and I suggest using a virtual environment for this*  
 4\. Navigate to repo root folder  
 5\. `pip install -r requirements.txt`  
